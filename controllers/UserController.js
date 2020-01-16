@@ -30,7 +30,7 @@ class UserController {
                     let token = generateToken(payload)
                     res.status(200).json({ token })
                 } else {
-                    next({ status: 400, message: "wrong password" })
+                    next({ status: 400, message: "email or password wrong !!" })
                 }
             })
             .catch(next)
