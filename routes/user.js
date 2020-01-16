@@ -5,4 +5,4 @@ route.post('/login',UserCon.login)
 route.post('/register', UserCon.register)
 
 
-module.exports = UserCon
+module.exports = route
