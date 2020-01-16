@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
+const _ = require("underscore");
 
 class PostController
 {
@@ -29,9 +30,12 @@ class PostController
 
     static addPost(req,res,next)
     {
-        console.log(req.body);
+        let data = _.pick(req.body,'title','description','file');
+        data.user = req.loggedUser.id;
+        data.comments = [];
+        data.likes = [];
         
-        Post.create(req.body)
+        Post.create(data)
         .then((post) => {
             res.status(201).json(post);
         })
