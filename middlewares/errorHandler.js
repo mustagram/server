@@ -6,7 +6,8 @@ function errorHandler(err, req, res, next) {
         res.status(400).json({
             msg: 'Email is already registered'
         })
-    } else if(err.name === "ValidationError") {
+    } 
+    else if(err.name === "ValidationError") {
         const errors = []
         for(key in err.errors) {
             errors.push(err.errors[key].message)
@@ -15,10 +16,10 @@ function errorHandler(err, req, res, next) {
             message: "Validation Error",
             errors
         })
-    } else if(err.message.name === 'JsonWebTokenError') {
+    }
+    else if(err.message.name === 'JsonWebTokenError') {
         res.status(status).json({ message: err.message.message })
     } 
-    
     else {
         res.status(status).json({ message })
     }
