@@ -1,13 +1,14 @@
+'use strict'
 const User = require('../models/User')
 const comparePassword = require('../helpers/bcrypt').comparePassword
 const generateToken = require('../helpers/jwt').generateToken
 
 class UserController {
     static register(req, res, next) {
+        console.log('masuk')
         let objUser = {
             email: req.body.email,
-            password: req.body.password,
-            phoneNumber: req.body.phoneNumber
+            password: req.body.password
         }
         User.create(objUser)
             .then(result => {
@@ -26,8 +27,7 @@ class UserController {
                 if(user && comparePassword(req.body.password, user.password)) {
                     let payload = {
                         id: user._id,
-                        email: user.email,
-                        phoneNumber: user.phoneNumber
+                        email: user.email
                     }
                     let token = generateToken(payload)
                     res.status(200).json({ token })
