@@ -9,7 +9,7 @@ const postSchema = new Schema({
     description: {
         type: String
     },
-    url: {
+    file: {
         type: String
     },
     likes: [{
@@ -24,7 +24,7 @@ const postSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        required: true,
+        //required: true,
         ref: "User" 
     },
     comments: [{
@@ -38,6 +38,8 @@ postSchema.pre('save',function(next) {
     if(!this.created_at)
     {
         this.created_at = new Date();
+        this.likes = [];
+        this.comments = [];
     }
 
     this.updated_at = new Date();
