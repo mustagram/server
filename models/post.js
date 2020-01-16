@@ -9,6 +9,9 @@ const postSchema = new Schema({
     description: {
         type: String
     },
+    url: {
+        type: String
+    },
     likes: [{
         type: Schema.Types.ObjectId,
         ref: "User"
