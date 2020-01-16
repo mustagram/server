@@ -64,7 +64,21 @@ class PostController
         Post.findById(req.params.id)
         .exec()
         .then((post) => {
-            post.likes.push(ObjectId(req.loggedUser.id));
+            let hasLiked = false;
+            for(let i=0;i<post.likes.length;i++)
+            {
+                if(post.likes[i].toString() == req.loggedUser.id)
+                {
+                    hasLiked = true;
+                    break;
+                }
+            }
+
+            if(!hasLiked)
+            {
+                post.likes.push(ObjectId(req.loggedUser.id));
+            }
+            
             return post.save();
         })
         .then(() => {
@@ -82,12 +96,12 @@ class PostController
         Post.findById(req.params.id)
         .exec()
         .then((post) => {
-            post.likes = post.likes.filter(id => id != req.loggedUser.id); 
+            post.likes = post.likes.filter(id => id.toString() != req.loggedUser.id); 
             return post.save();
         })
         .then(() => {
             res.status(201).json({
-                msg: "Like successful"
+                msg: "Unlike successful"
             });
         })
         .catch((error) => {
