@@ -1,4 +1,4 @@
-const verifyToken = require('../helpers/tokenMaker').decodeToken
+const verifyToken = require('../helpers/jwt').decodeToken
 const User = require('../models/User')
 
 function authentication(req, res, next) {
@@ -7,7 +7,7 @@ function authentication(req, res, next) {
         User.findById(decodedToken.id)
             .then(user => {
                 if(user) {
-                    let temp = {id:user.id, email: user.email,}
+                    let temp = {id:user._id, email: user.email,}
                     req.loggedUser = temp
                     next()
                 } else {
@@ -22,6 +22,4 @@ function authentication(req, res, next) {
 }
 
 
-module.exports = {
-    authentication
-}
+module.exports = authentication
