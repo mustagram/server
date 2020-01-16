@@ -10,17 +10,11 @@ const commentSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         ref: "User" 
-    },
-    post: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "Post" 
     }
 }, {timestamps : true},{versionKey : false});
 
 commentSchema.pre('save',function(next) {
     this.user = ObjectId(this.user);
-    this.post = ObjectId(this.post);
     
     next();
 })
