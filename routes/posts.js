@@ -16,7 +16,7 @@ const upload = gcsUpload({
 
 const PostController = require("../controllers/PostController");
 
-const authorisation = require("../middlewares/authorisation");
+const authorisation = require("../middlewares/authorisation").post_authorisation;
 
 postsRouter.get('/',(req,res,next) => {
     //res.send('Post list');

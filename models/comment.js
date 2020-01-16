@@ -6,9 +6,6 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
-    created_at: {
-        type: Date
-    },
     user: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -19,17 +16,11 @@ const commentSchema = new Schema({
         required: true,
         ref: "Post" 
     }
-});
+}, {timestamps : true},{versionKey : false});
 
 commentSchema.pre('save',function(next) {
     this.user = ObjectId(this.user);
     this.post = ObjectId(this.post);
-    if(!this.created_at)
-    {
-        this.created_at = new Date();
-    }
-
-    this.updated_at = new Date();
     
     next();
 })
