@@ -16,7 +16,7 @@ const upload = gcsUpload({
 
 const PostController = require("../controllers/PostController");
 
-//const authorisation = require("../middlewares/authorisation");
+const authorisation = require("../middlewares/authorisation");
 
 postsRouter.get('/',(req,res,next) => {
     //res.send('Post list');
@@ -33,27 +33,27 @@ postsRouter.post('/', upload.single('file'), (req,res,next) => {
     PostController.addPost(req,res,next);
 });
 
-postsRouter.put('/:id' /*,authorisation*/ ,(req,res,next) => {
+postsRouter.put('/:id', authorisation,(req,res,next) => {
     res.send('update Post');
     //PostController.updatePost(req,res,next);
 });
 
-postsRouter.patch('/:id' /*,authorisation*/ ,(req,res,next) => {
+postsRouter.patch('/:id', authorisation, (req,res,next) => {
     res.send('update Post');
     //PostController.updatePost(req,res,next);
 });
 
-postsRouter.delete('/:id' /*,authorisation*/ ,(req,res,next) => {
+postsRouter.delete('/:id', authorisation, (req,res,next) => {
     //res.send('delete Post');
     PostController.deletePost(req,res,next);
 });
 
-postsRouter.post('/:id/like' /*,authorisation*/ ,(req,res,next) => {
+postsRouter.post('/:id/like', authorisation, (req,res,next) => {
     //res.send('like Post');
     PostController.likePost(req,res,next);
 });
 
-postsRouter.delete('/:id/like' /*,authorisation*/ ,(req,res,next) => {
+postsRouter.delete('/:id/like', authorisation, (req,res,next) => {
     //res.send('unlike Post');
     PostController.unlikePost(req,res,next);
 });
