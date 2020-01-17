@@ -9,16 +9,13 @@ const postSchema = new Schema({
     description: {
         type: String
     },
+    file: {
+        type: String
+    },
     likes: [{
         type: Schema.Types.ObjectId,
         ref: "User"
     }],
-    created_at: {
-        type: Date
-    },
-    updated_at: {
-        type: Date
-    },
     user: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -28,17 +25,10 @@ const postSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Comment"
     }]
-});
+}, {timestamps : true},{versionKey : false});
 
 postSchema.pre('save',function(next) {
     this.user = ObjectId(this.user);
-    if(!this.created_at)
-    {
-        this.created_at = new Date();
-    }
-
-    this.updated_at = new Date();
-    
     next();
 })
 
