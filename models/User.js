@@ -2,7 +2,10 @@
 const { hashPassword } = require('../helpers/bcrypt')
 const { Schema, model } = require('mongoose')
 
-const userSchema = Schema({    
+const userSchema = Schema({
+    name: {
+        type: String
+    },
     email : {
         type : String,
         required : [true, 'you must enter your email'],
