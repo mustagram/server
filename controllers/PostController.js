@@ -8,7 +8,12 @@ class PostController
 {
     static showAllPosts(req,res,next) // everyone's posts
     {
-        Post.find().exec()
+        Post.find()
+        .populate('user')
+        .populate({
+            path : 'comments',
+            populate : {path : 'user'}
+        })
         .then((posts) => {
             res.status(200).json(posts);
         })
