@@ -9,7 +9,7 @@ const upload = gcsUpload({
       fileSize: 5e6 // in bytes
     },
     gcsConfig: {
-      keyFilename: './credentials/Mustagram.json',
+      keyFilename: `./credentials/${process.env.CREDENTIAL_FILE}`,
       bucketName: process.env.BUCKETNAME
     }
 })
@@ -48,14 +48,24 @@ postsRouter.delete('/:id', authorisation, (req,res,next) => {
     PostController.deletePost(req,res,next);
 });
 
-postsRouter.post('/:id/like', authorisation, (req,res,next) => {
+postsRouter.post('/:id/like', (req,res,next) => {
     //res.send('like Post');
     PostController.likePost(req,res,next);
 });
 
-postsRouter.delete('/:id/like', authorisation, (req,res,next) => {
+postsRouter.delete('/:id/like', (req,res,next) => {
     //res.send('unlike Post');
     PostController.unlikePost(req,res,next);
+});
+
+postsRouter.get('/:id/comments', (req,res,next) => {
+    res.send('view Post comments');
+    //PostController.showPostComments(req,res,next);
+});
+
+postsRouter.post('/:id/comments', (req,res,next) => {
+    res.send('add Post comment');
+    //PostController.commentPost(req,res,next);
 });
 
 module.exports = postsRouter;

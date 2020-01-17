@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const Comment = require("../models/comment");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const _ = require("underscore");
@@ -106,6 +107,55 @@ class PostController
         })
         .catch((error) => {
             next(error);
+        })
+    }
+
+    static showPostComments(req,res,next)
+    {
+        Comment.find({
+            post: req.params.id
+        })
+        .exec()
+        .then((comments) => {
+            res.status(200).json(comments);
+        })
+        .catch((error) => {
+            next(error);
+        })
+    }
+
+    static commentPost(req,res,next)
+    {
+        let postId = req.params.id;
+        let data = _.pick(req.body,'text');
+        data.user = req.loggedUser.id;
+        let newComment;
+
+        Comment.create(data)
+        .then((comment) => {
+            newComment = comment;
+            console.log(comment);
+            return Post.findById(postId).exec();
+        })
+        .then((post) => {
+            if(post)
+            {
+                post.comments.push(newComment._id);
+                return post.save();
+            }
+            else
+            {
+                next({status: 404,message: "Not found"})
+            }
+        })
+        .then((post) => {
+            res.status(200).json({
+                post: post,
+                comment: newComment
+            });
+        })
+        .catch((error) => {
+            next(error)
         })
     }
 }

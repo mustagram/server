@@ -17,8 +17,8 @@ commentsRouter.get('/:id',(req,res,next) => {
 });
 
 commentsRouter.post('/', (req,res,next) => {
-    res.send('add Comment');
-    //CommentController.addComment(req,res,next);
+    //res.send('add Comment');
+    CommentController.addComment(req,res,next);
 });
 
 commentsRouter.put('/:id', authorisation, (req,res,next) => {
