@@ -9,7 +9,7 @@ const upload = gcsUpload({
       fileSize: 5e6 // in bytes
     },
     gcsConfig: {
-      keyFilename: `./credentials/${process.env.CREDENTIAL_FILE}`,
+      keyFilename: process.env.CREDENTIAL_FILE,
       bucketName: process.env.BUCKETNAME
     }
 })
