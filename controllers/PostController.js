@@ -31,6 +31,7 @@ class PostController
 
     static addPost(req,res,next)
     {
+        console.log('masukkkk')
         let data = _.pick(req.body,'title','description','file');
         data.user = req.loggedUser.id;
         data.comments = [];
