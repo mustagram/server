@@ -5,6 +5,7 @@ const generateToken = require('../helpers/jwt').generateToken
 class UserController {
     static register(req, res, next) {
         let objUser = {
+            name: req.body.name,
             email: req.body.email,
             password: req.body.password
         }
