@@ -48,12 +48,12 @@ postsRouter.delete('/:id', authorisation, (req,res,next) => {
     PostController.deletePost(req,res,next);
 });
 
-postsRouter.post('/:id/like', authorisation, (req,res,next) => {
+postsRouter.post('/:id/like', (req,res,next) => {
     //res.send('like Post');
     PostController.likePost(req,res,next);
 });
 
-postsRouter.delete('/:id/like', authorisation, (req,res,next) => {
+postsRouter.delete('/:id/like', (req,res,next) => {
     //res.send('unlike Post');
     PostController.unlikePost(req,res,next);
 });
