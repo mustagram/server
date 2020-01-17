@@ -4,12 +4,47 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const _ = require("underscore");
 
+
+// Imports the Google Cloud client libraries
+const vision = require("@google-cloud/vision");
+async function detectUnsafe(url) {
+    // [START vision_safe_search_detection_gcs]
+  
+    // Creates a client
+    const client = new vision.ImageAnnotatorClient();
+  
+    const bucketName = process.env.BUCKETNAME;
+    const fileName = url.split('/').pop();
+  
+    // Performs safe search property detection on the remote file
+    const [result] = await client.safeSearchDetection(
+      `gs://${bucketName}/${fileName}`
+    );
+    const detections = result.safeSearchAnnotation;
+    console.log(`Adult: ${detections.adult}`);
+    console.log(`Spoof: ${detections.spoof}`);
+    console.log(`Medical: ${detections.medical}`);
+    console.log(`Violence: ${detections.violence}`);
+
+    return detections.adult == "VERY_LIKELY" || detections.adult == "LIKELY" || detections.racy == "VERY_LIKELY" || detections.racy == "LIKELY" || detections.violence == "VERY_LIKELY" || detections.violence == "LIKELY" || detections.medical == "VERY_LIKELY" || detections.medical == "LIKELY"
+
+    // [END vision_safe_search_detection_gcs]
+}
+
 class PostController
 {
     static showAllPosts(req,res,next) // everyone's posts
     {
         Post.find().exec()
-        .then((posts) => {
+        .then(async (posts) => {
+            for(let i=0;i<posts.length;i++)
+            {
+                let isUnsafe = await detectUnsafe(posts[i].file)
+                if(isUnsafe)
+                {
+                    posts[i].file = "https://via.placeholder.com/400x400?text=Marked+as+unsafe";
+                }
+            }
             res.status(200).json(posts);
         })
         .catch((error) => {
@@ -21,7 +56,12 @@ class PostController
     {
         Post.findById(req.params.id)
         .exec()
-        .then((post) => {
+        .then(async (post) => {
+            let isUnsafe = await detectUnsafe(post.file)
+            if(isUnsafe)
+            {
+                post.file = "https://via.placeholder.com/400x400?text=Marked+as+unsafe";
+            }
             res.status(200).json(post);
         })
         .catch((error) => {
@@ -37,7 +77,12 @@ class PostController
         data.likes = [];
         
         Post.create(data)
-        .then((post) => {
+        .then(async (post) => {
+            let isUnsafe = await detectUnsafe(post.file)
+            if(isUnsafe)
+            {
+                post.file = "https://via.placeholder.com/400x400?text=Marked+as+unsafe";
+            }
             res.status(201).json(post);
         })
         .catch((error) => {
