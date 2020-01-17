@@ -1,5 +1,6 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
+const _ = require("underscore")
 
 class CommentController
 {
@@ -31,8 +32,9 @@ class CommentController
     static addComment(req,res,next)
     {
         let postId = req.body.post;
-        let data = _.pick(req.body,'text');
+        let data = _.pick(req.body,'text','post');
         data.user = req.loggedUser.id;
+
         let newComment;
 
         Comment.create(data)

@@ -35,7 +35,12 @@ class PostController
 {
     static showAllPosts(req,res,next) // everyone's posts
     {
-        Post.find().exec()
+        Post.find()
+        .populate('user')
+        .populate({
+            path : 'comments',
+            populate : {path : 'user'}
+        })
         .then(async (posts) => {
             for(let i=0;i<posts.length;i++)
             {
@@ -71,6 +76,7 @@ class PostController
 
     static addPost(req,res,next)
     {
+        console.log('masukkkk')
         let data = _.pick(req.body,'title','description','file');
         data.user = req.loggedUser.id;
         data.comments = [];
