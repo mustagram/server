@@ -6,7 +6,7 @@ const gcsUpload = require('gcs-upload');
 
 const upload = gcsUpload({
     limits: {
-      fileSize: 5e6 // in bytes
+      fileSize: 50e6 // in bytes
     },
     gcsConfig: {
       keyFilename: process.env.CREDENTIAL_FILE,
