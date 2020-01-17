@@ -58,4 +58,14 @@ postsRouter.delete('/:id/like', (req,res,next) => {
     PostController.unlikePost(req,res,next);
 });
 
+postsRouter.get('/:id/comments', (req,res,next) => {
+    res.send('view Post comments');
+    //PostController.showPostComments(req,res,next);
+});
+
+postsRouter.post('/:id/comments', (req,res,next) => {
+    res.send('add Post comment');
+    //PostController.commentPost(req,res,next);
+});
+
 module.exports = postsRouter;
