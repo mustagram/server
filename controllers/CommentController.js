@@ -66,11 +66,36 @@ class CommentController
 
     static deleteComment(req,res,next)
     {
-        Comment.findByIdAndDelete(req.params.id)
+        let postId;
+        Comment.findById(req.params.id)
         .exec()
+        .then((comment) => {
+            if(!comment)
+            {
+                next({status: 404,message: "Not found"})
+            }
+            else
+            {
+                //get origin post id
+                postId = comment.post;
+
+                //delete comment
+                return Comment.findByIdAndDelete(req.params.id).exec();
+            }
+            
+        })        
         .then(() => {
-            res.status(204).json({
-                msg: "Delete successful"
+            //get origin post
+            return Post.findById(postid).exec();
+        })
+        .then((post) => {
+            //remove comment from comments array
+            post.comments = post.comments.filter(id => id.toString() != req.params.id);
+            return post.save();
+        })
+        .then(() => {
+            res.status(201).json({
+                msg: "Delete comment successful"
             });
         })
         .catch((error) => {
