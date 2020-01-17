@@ -107,6 +107,7 @@ class PostController
 
     static likePost(req,res,next)
     {
+        let numberOfLikes;
         Post.findById(req.params.id)
         .exec()
         .then((post) => {
@@ -125,11 +126,13 @@ class PostController
                 post.likes.push(ObjectId(req.loggedUser.id));
             }
             
+            numberOfLikes = post.likes.length;
             return post.save();
         })
         .then(() => {
             res.status(201).json({
-                msg: "Like successful"
+                msg: "Like successful",
+                numberOfLikes: numberOfLikes
             });
         })
         .catch((error) => {
@@ -139,15 +142,18 @@ class PostController
 
     static unlikePost(req,res,next)
     {
+        let numberOfLikes;
         Post.findById(req.params.id)
         .exec()
         .then((post) => {
             post.likes = post.likes.filter(id => id.toString() != req.loggedUser.id); 
+            numberOfLikes = post.likes.length;
             return post.save();
         })
         .then(() => {
             res.status(201).json({
-                msg: "Unlike successful"
+                msg: "Unlike successful",
+                numberOfLikes: numberOfLikes
             });
         })
         .catch((error) => {
